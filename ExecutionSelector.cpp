@@ -9,7 +9,7 @@ int main() {
     HANDLE hSingleProMutex = CreateMutexA(NULL, TRUE, PROGRAM_NAME);
     HANDLE hMailslot;
 
-    char mailData[2];
+    int mailData[1];
     DWORD mailDataLen;
 
     if (hSingleProMutex && GetLastError() == ERROR_ALREADY_EXISTS) {
@@ -19,9 +19,8 @@ int main() {
         if (hMailslot == INVALID_HANDLE_VALUE) {
             return 1;
         }
-        mailData[0] = 1;     //随便写一个值用于判断
-        mailData[1] = '\0';  //字符串形式加0
-        if (!WriteFile(hMailslot, mailData, (DWORD) strlen(mailData) + 1, &mailDataLen, NULL)) {
+        mailData[0] = 1;  //随便写一个值用于判断
+        if (!WriteFile(hMailslot, mailData, sizeof(mailData), &mailDataLen, NULL)) {
             CloseHandle(hMailslot);
             return 1;
         }
